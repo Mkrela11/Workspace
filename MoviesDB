@@ -1,0 +1,746 @@
+-- Tabela FILMY 
+-- Tabela glowna ma Primary Key film_id 
+-- Relacje: jeden do wielu z tabela receznje, wiele do wielu z tabelami filmy_gatunki i aktorzy_filmy
+CREATE TABLE filmy (
+    film_id INT IDENTITY(1,1) PRIMARY KEY,
+    tytul VARCHAR(255) NOT NULL,
+    data_wydania DATE NOT NULL,
+    rezyser VARCHAR(255) NOT NULL
+);
+
+-- Tabela RECENZJE 
+-- Klucz glowny recenzja_id, klucz obcy film_id
+-- Relacje: wiele do jednego z tabela filmy
+CREATE TABLE recenzje (
+    recenzja_id INT IDENTITY(1,1) PRIMARY KEY,
+    imie VARCHAR(100) NOT NULL,
+    nazwisko VARCHAR(100) NOT NULL,
+    data_wydania DATE NOT NULL,
+    tresc VARCHAR(MAX) NOT NULL,
+    film_id INT NOT NULL,
+    FOREIGN KEY (film_id) REFERENCES filmy(film_id) ON DELETE CASCADE -- gdy jakis film_id zostanie usuniety to recenzja do niego rowniez. Po co nam ona?
+);
+
+-- Tabela AKTORZY
+-- Klucz glowny aktor_id
+-- Relacje: wiele do wilu z tabela posrednia aktorzy_filmy 
+CREATE TABLE aktorzy (
+    aktor_id INT IDENTITY(1,1) PRIMARY KEY,
+    imie VARCHAR(100) NOT NULL,
+    nazwisko VARCHAR(100) NOT NULL,
+    data_urodzenia DATE NOT NULL,
+    nominacje_do_oscarow INT DEFAULT 0
+);
+
+-- Tabela GATUNKI 
+-- Klucz glowny: gatunek_id
+-- Relacje: wiele do wielu z tabela posrednia filmy_gatunki
+CREATE TABLE gatunki (
+    gatunek_id INT IDENTITY(1,1) PRIMARY KEY,
+    gatunek VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Tabela pośrednia FILMY_GATUNKI 
+-- Klucz glowny film_id,gatunek_id Klucze obce: film_id,gatunek_id
+-- Nie dochodzi tu sensu stricte do relacji, bo tabela jest posrednikiem miedzy film_id i gatunek_id
+CREATE TABLE filmy_gatunki (
+    film_id INT NOT NULL,
+    gatunek_id INT NOT NULL,
+    PRIMARY KEY (film_id, gatunek_id),
+    FOREIGN KEY (film_id) REFERENCES filmy(film_id) ON DELETE CASCADE,
+    FOREIGN KEY (gatunek_id) REFERENCES gatunki(gatunek_id) ON DELETE CASCADE
+);
+
+-- Tabela pośrednia AKTORZY_FILMY 
+-- Klucz glowny aktor_id, film_id, Klucze obce aktor_id, film_id
+-- Nie dochodzi tu sensu stricte do relacji, bo tabela jest posrednikiem miedzy film_id i aktor_id
+CREATE TABLE aktorzy_filmy (
+    aktor_id INT NOT NULL,
+    film_id INT NOT NULL,
+    PRIMARY KEY (aktor_id, film_id),
+    FOREIGN KEY (aktor_id) REFERENCES aktorzy(aktor_id) ON DELETE CASCADE,
+    FOREIGN KEY (film_id) REFERENCES filmy(film_id) ON DELETE CASCADE
+);
+
+---------------------------------------------------------------------------------------------------------------------
+
+-- Wstawianie danych do tabeli filmy
+INSERT INTO filmy (tytul, data_wydania, rezyser) VALUES
+	('Oppenheimer', '2023-07-21', 'Christopher Nolan'),
+	('Everything Everywhere All at Once', '2022-03-11', 'Daniel Kwan'),
+	('CODA', '2021-08-13', 'Sian Heder'),
+	('Nomadland', '2020-12-04', 'Chloé Zhao'),
+	('Parasite', '2019-05-30', 'Bong Joon-ho'),
+	('Green Book', '2018-09-11', 'Peter Farrelly'),
+	('The Shape of Water', '2017-12-01', 'Guillermo del Toro'),
+	('Moonlight', '2016-10-21', 'Barry Jenkins'),
+	('Spotlight', '2015-11-06', 'Tom McCarthy'),
+	('Birdman', '2014-08-27', 'Alejandro G. Iñárritu'),
+    ('12 Years a Slave', '2013-10-18', 'Steve McQueen'),
+    ('Argo', '2012-10-12', 'Ben Affleck'),
+    ('The Artist', '2011-10-12', 'Michel Hazanavicius'),
+    ('The King''s Speech', '2010-09-06', 'Tom Hooper'),
+    ('The Hurt Locker', '2008-10-10', 'Kathryn Bigelow'),
+    ('Slumdog Millionaire', '2008-08-30', 'Danny Boyle'),
+    ('No Country for Old Men', '2007-11-09', 'Joel Coen'),
+    ('The Departed', '2006-10-06', 'Martin Scorsese'),
+    ('Crash', '2004-09-10', 'Paul Haggis'),
+    ('Million Dollar Baby', '2004-12-15', 'Clint Eastwood'),
+    ('The Lord of the Rings: The Return of the King', '2003-12-17', 'Peter Jackson'),
+    ('Chicago', '2002-12-27', 'Rob Marshall'),
+    ('A Beautiful Mind', '2001-12-13', 'Ron Howard'),
+    ('Gladiator', '2000-05-01', 'Ridley Scott'),
+    ('American Beauty', '1999-09-08', 'Sam Mendes'),
+    ('Shakespeare in Love', '1998-12-11', 'John Madden'),
+    ('Titanic', '1997-12-19', 'James Cameron'),
+    ('The English Patient', '1996-11-15', 'Anthony Minghella'),
+    ('Braveheart', '1995-05-24', 'Mel Gibson'),
+    ('Forrest Gump', '1994-06-23', 'Robert Zemeckis'),
+    ('Schindler''s List', '1993-11-30', 'Steven Spielberg'),
+    ('Unforgiven', '1992-08-07', 'Clint Eastwood'),
+    ('The Silence of the Lambs', '1991-02-14', 'Jonathan Demme'),
+    ('Dances with Wolves', '1990-11-09', 'Kevin Costner'),
+    ('Driving Miss Daisy', '1989-12-15', 'Bruce Beresford'),
+    ('Rain Man', '1988-12-16', 'Barry Levinson'),
+    ('The Last Emperor', '1987-10-23', 'Bernardo Bertolucci'),
+    ('Platoon', '1986-12-19', 'Oliver Stone'),
+    ('Out of Africa', '1985-12-18', 'Sydney Pollack'),
+    ('Amadeus', '1984-09-19', 'Milos Forman'),
+    ('Terms of Endearment', '1983-11-23', 'James L. Brooks'),
+    ('Gandhi', '1982-11-30', 'Richard Attenborough'),
+    ('Chariots of Fire', '1981-05-15', 'Hugh Hudson'),
+    ('Ordinary People', '1980-09-19', 'Robert Redford'),
+    ('Kramer vs. Kramer', '1979-12-19', 'Robert Benton'),
+    ('The Deer Hunter', '1978-12-08', 'Michael Cimino'),
+    ('Annie Hall', '1977-04-20', 'Woody Allen'),
+    ('Rocky', '1976-11-21', 'John G. Avildsen'),
+    ('One Flew Over the Cuckoo''s Nest', '1975-11-19', 'Milos Forman'),
+    ('The Godfather Part II', '1974-12-20', 'Francis Ford Coppola'),
+    ('The Sting', '1973-12-25', 'George Roy Hill'),
+    ('The Godfather', '1972-03-24', 'Francis Ford Coppola'),
+    ('The French Connection', '1971-10-09', 'William Friedkin'),
+    ('Patton', '1970-02-04', 'Franklin J. Schaffner'),
+    ('Midnight Cowboy', '1969-05-25', 'John Schlesinger'),
+    ('Oliver!', '1968-09-26', 'Carol Reed'),
+    ('In the Heat of the Night', '1967-08-02', 'Norman Jewison'),
+    ('A Man for All Seasons', '1966-12-12', 'Fred Zinnemann'),
+    ('The Sound of Music', '1965-03-02', 'Robert Wise'),
+    ('My Fair Lady', '1964-10-21', 'George Cukor'),
+    ('Tom Jones', '1963-06-27', 'Tony Richardson'),
+    ('Lawrence of Arabia', '1962-12-10', 'David Lean'),
+    ('West Side Story', '1961-10-18', 'Robert Wise'),
+    ('The Apartment', '1960-06-15', 'Billy Wilder'),
+    ('Ben-Hur', '1959-11-18', 'William Wyler'),
+    ('Gigi', '1958-05-15', 'Vincente Minnelli'),
+    ('The Bridge on the River Kwai', '1957-10-02', 'David Lean'),
+    ('Around the World in 80 Days', '1956-10-17', 'Michael Anderson'),
+    ('Marty', '1955-04-11', 'Delbert Mann'),
+    ('On the Waterfront', '1954-07-28', 'Elia Kazan'),
+    ('From Here to Eternity', '1953-08-05', 'Fred Zinnemann'),
+	('The Greatest Show on Earth', '1952-01-10', 'Cecil B. DeMille'),
+    ('An American in Paris', '1951-10-04', 'Vincente Minnelli'),
+    ('All About Eve', '1950-10-13', 'Joseph L. Mankiewicz'),
+    ('Hamlet', '1948-05-04', 'Laurence Olivier'),
+    ('Gentleman''s Agreement', '1947-11-11', 'Elia Kazan'),
+    ('The Best Years of Our Lives', '1946-12-25', 'William Wyler'),
+    ('The Lost Weekend', '1945-11-29', 'Billy Wilder'),
+    ('Going My Way', '1944-05-03', 'Leo McCarey'),
+    ('Casablanca', '1942-11-26', 'Michael Curtiz'),
+    ('Mrs. Miniver', '1942-07-03', 'William Wyler'),
+    ('How Green Was My Valley', '1941-10-28', 'John Ford'),
+    ('Rebecca', '1940-03-27', 'Alfred Hitchcock'),
+    ('Gone with the Wind', '1939-12-15', 'Victor Fleming'),
+    ('You Can''t Take It with You', '1938-09-01', 'Frank Capra'),
+    ('The Life of Emile Zola', '1937-08-11', 'William Dieterle'),
+    ('The Great Ziegfeld', '1936-03-22', 'Robert Z. Leonard'),
+    ('Mutiny on the Bounty', '1935-11-08', 'Frank Lloyd'),
+    ('It Happened One Night', '1934-02-22', 'Frank Capra'),
+    ('Cavalcade', '1933-04-15', 'Frank Lloyd'),
+    ('Grand Hotel', '1932-04-12', 'Edmund Goulding'),
+    ('Cimarron', '1931-02-09', 'Wesley Ruggles'),
+    ('All Quiet on the Western Front', '1930-04-21', 'Lewis Milestone'),
+    ('The Broadway Melody', '1929-02-08', 'Harry Beaumont'),
+    ('Wings', '1927-08-12', 'William A. Wellman'),
+    ('Sunrise: A Song of Two Humans', '1927-09-23', 'F.W. Murnau'),
+    ('The Last Command', '1928-01-22', 'Josef von Sternberg'),
+    ('7th Heaven', '1927-05-06', 'Frank Borzage'),
+    ('Chang: A Drama of the Wilderness', '1927-04-29', 'Merian C. Cooper'),
+    ('The Crowd', '1928-03-24', 'King Vidor');
+
+INSERT INTO aktorzy (imie, nazwisko, data_urodzenia, nominacje_do_oscarow) 
+VALUES  
+	('Brendan', 'Fraser', '1968-12-03', 1), 
+	('Will', 'Smith', '1968-09-25', 3), 
+	('Anthony', 'Hopkins', '1937-12-31', 6), 
+	('Joaquin', 'Phoenix', '1974-10-28', 4), 
+	('Rami', 'Malek', '1981-05-12', 1), 
+	('Gary', 'Oldman', '1958-03-21', 3), 
+	('Casey', 'Affleck', '1975-08-12', 2), 
+	('Leonardo', 'DiCaprio', '1974-11-11', 6), 
+	('Eddie', 'Redmayne', '1982-01-06', 2), 
+	('Matthew', 'McConaughey', '1969-11-04', 1), 
+    ('Daniel', 'Day-Lewis', '1957-04-29', 6), 
+    ('Jean', 'Dujardin', '1972-06-19', 1), 
+    ('Colin', 'Firth', '1960-09-10', 2), 
+    ('Jeff', 'Bridges', '1949-12-04', 7), 
+    ('Sean', 'Penn', '1960-08-17', 5), 
+    ('Forest', 'Whitaker', '1961-07-15', 1), 
+    ('Philip Seymour', 'Hoffman', '1967-07-23', 4), 
+    ('Jamie', 'Foxx', '1967-12-13', 2), 
+    ('Adrien', 'Brody', '1973-04-14', 1), 
+    ('Denzel', 'Washington', '1954-12-28', 8), 
+    ('Russell', 'Crowe', '1964-04-07', 3), 
+    ('Kevin', 'Spacey', '1959-07-26', 2), 
+    ('Roberto', 'Benigni', '1952-10-27', 1), 
+    ('Jack', 'Nicholson', '1937-04-22', 12), 
+    ('Geoffrey', 'Rush', '1951-07-06', 4), 
+    ('Nicolas', 'Cage', '1964-01-07', 2), 
+    ('Tom', 'Hanks', '1956-07-09', 6), 
+    ('Al', 'Pacino', '1940-04-25', 9), 
+    ('Jeremy', 'Irons', '1948-09-19', 1), 
+    ('Daniel', 'Day-Lewis', '1957-04-29', 6), 
+    ('Dustin', 'Hoffman', '1937-08-08', 7), 
+    ('Paul', 'Newman', '1925-01-26', 10), 
+    ('William', 'Hurt', '1950-03-20', 4), 
+    ('F.', 'Murray Abraham', '1939-10-24', 1), 
+    ('Robert', 'Duvall', '1931-01-05', 7), 
+    ('Ben', 'Kingsley', '1943-12-31', 4), 
+    ('Henry', 'Fonda', '1905-05-16', 2), 
+    ('Robert', 'De Niro', '1943-08-17', 7), 
+    ('Peter', 'Finch', '1916-09-28', 2), 
+    ('Jack', 'Nicholson', '1937-04-22', 12), 
+    ('Art', 'Carney', '1918-11-04', 1), 
+    ('Marlon', 'Brando', '1924-04-03', 8), 
+    ('Gene', 'Hackman', '1930-01-30', 5), 
+    ('George', 'C. Scott', '1927-10-18', 4), 
+    ('John', 'Wayne', '1907-05-26', 2), 
+    ('Cliff', 'Robertson', '1923-09-09', 1), 
+    ('Rod', 'Steiger', '1925-04-14', 2), 
+    ('Paul', 'Scofield', '1922-01-21', 1),
+    ('Lee', 'Marvin', '1924-02-19', 1), 
+    ('Rex', 'Harrison', '1908-03-05', 2), 
+    ('Sidney', 'Poitier', '1927-02-20', 2), 
+    ('Gregory', 'Peck', '1916-04-05', 5), 
+    ('Maximilian', 'Schell', '1930-12-08', 3), 
+    ('Burt', 'Lancaster', '1913-11-02', 4), 
+    ('Charlton', 'Heston', '1923-10-04', 1), 
+    ('David', 'Niven', '1910-03-01', 1), 
+    ('Alec', 'Guinness', '1914-04-02', 2), 
+    ('Yul', 'Brynner', '1920-07-11', 1), 
+    ('Ernest', 'Borgnine', '1917-01-24', 1), 
+    ('Marlon', 'Brando', '1924-04-03', 8), 
+    ('William', 'Holden', '1918-04-17', 3), 
+    ('Gary', 'Cooper', '1901-05-07', 5), 
+    ('Humphrey', 'Bogart', '1899-12-25', 3), 
+    ('José', 'Ferrer', '1912-01-08', 3), 
+    ('Broderick', 'Crawford', '1911-12-09', 1), 
+    ('Laurence', 'Olivier', '1907-05-22', 10), 
+    ('Ronald', 'Colman', '1891-02-09', 2), 
+    ('Fredric', 'March', '1897-08-31', 5), 
+    ('Ray', 'Milland', '1907-01-03', 1), 
+    ('Bing', 'Crosby', '1903-05-03', 3), 
+    ('Paul', 'Lukas', '1891-05-26', 1), 
+    ('James', 'Cagney', '1899-07-17', 3), 
+    ('Robert', 'Donat', '1905-03-18', 2), 
+    ('Spencer', 'Tracy', '1900-04-05', 9), 
+    ('Paul', 'Muni', '1895-09-22', 5), 
+    ('Victor', 'McLaglen', '1886-12-10', 1), 
+    ('Clark', 'Gable', '1901-02-01', 3), 
+    ('Charles', 'Laughton', '1899-07-01', 3), 
+    ('Wallace', 'Beery', '1885-04-01', 1), 
+    ('Lionel', 'Barrymore', '1878-04-28', 1), 
+    ('George', 'Arliss', '1868-04-10', 2), 
+    ('Warner', 'Baxter', '1889-03-29', 1), 
+    ('Emil', 'Jannings', '1884-07-23', 1), 
+    ('Richard', 'Dreyfuss', '1947-10-29', 2), 
+    ('Peter', 'O’Toole', '1932-08-02', 8), 
+    ('Robert', 'Redford', '1936-08-18', 1), 
+    ('Morgan', 'Freeman', '1937-06-01', 5), 
+    ('Henry', 'Fonda', '1905-05-16', 2), 
+    ('James', 'Stewart', '1908-05-20', 5), 
+    ('Clint', 'Eastwood', '1930-05-31', 2), 
+    ('Gene', 'Hackman', '1930-01-30', 5), 
+    ('Mickey', 'Rooney', '1920-09-23', 4), 
+    ('Rod', 'Steiger', '1925-04-14', 2), 
+    ('Kevin', 'Costner', '1955-01-18', 1), 
+    ('Robert', 'Duvall', '1931-01-05', 7), 
+    ('George', 'Burns', '1896-01-20', 1), 
+    ('Laurence', 'Olivier', '1907-05-22', 10), 
+    ('Walter', 'Brennan', '1894-07-25', 4),
+	('Jack', 'Lemmon', '1925-02-08', 2),
+	('Richard', 'Burton', '1925-11-25',6);
+
+INSERT INTO recenzje (imie, nazwisko, data_wydania, tresc, film_id) VALUES
+	('Izabela', 'Jastrzebski', '2021-10-17', 'Film byl poprawny, ale nie wyroznial sie niczym szczegolnym.', 1),
+	('Henryk', 'Wojciechowski', '2024-09-28', 'Nie rozumiem zachwytu, film byl dla mnie przecietny.', 2),
+	('Weronika', 'Laskowski', '2021-10-17', 'Rezyseria na wysokim poziomie, swietnie nakrecone sceny.', 3),
+	('Ursyn', 'Krol', '2023-04-04', 'Bardzo dobry film, wzruszajacy i pelen emocji.', 4),
+	('Nikodem', 'Witkowski', '2020-05-09', 'Postaci byly dobrze napisane, ale film troche sie dluzy.', 5),
+	('Przemyslaw', 'Dziuba', '2021-08-27', 'Doskonała rezyseria i wciagajaca historia, polecam kazdemu.', 6),
+	('Marta', 'Zielinski', '2020-06-07', 'Film byl poprawny, ale nie wyroznial sie niczym szczegolnym.', 7),
+	('Andrzej', 'Jablonski', '2023-11-24', 'Efekty specjalne byly niesamowite, ale fabula byla dosc slaba.', 8),
+	('Hubert', 'Wozniak', '2020-10-07', 'Rewelacyjna gra aktorska i dobrze napisane dialogi.', 9),
+	('Natalia', 'Stepien', '2023-05-16', 'Film mial potencjal, ale zostal niewykorzystany.', 10),
+    ('Filip', 'Sawicki', '2023-05-01', 'Film mial potencjal, ale zostal niewykorzystany.', 11),
+    ('Michal', 'Nowak', '2023-12-16', 'Rezyseria na wysokim poziomie, swietnie nakrecone sceny.', 12),
+    ('Kamila', 'Markiewicz', '2020-02-04', 'Bardzo klimatyczny film, trzymal w napieciu do samego konca.', 13),
+    ('Franciszek', 'Wrobel', '2021-03-28', 'Film z ogromnym potencjalem, ale troche zawiodlem sie na zakonczeniu.', 14),
+    ('Katarzyna', 'Makowski', '2024-09-18', 'Zbyt przewidywalny, ale mimo wszystko dobrze sie ogladalo.', 15),
+    ('Krzysztof', 'Szymanski', '2020-11-28', 'Sztuczne dialogi i slaba gra aktorska, nie polecam.', 16),
+    ('Konrad', 'Chmielewski', '2023-01-19', 'Nie bylo zle, ale moglo byc lepiej. Tylko na jedno obejrzenie.', 17),
+    ('Adam', 'Podgorski', '2024-09-09', 'Film, ktory kazdy powinien zobaczyc, rewelacyjne wykonanie!', 18),
+    ('Magdalena', 'Malinowski', '2022-05-10', 'Swietna fabula, dawno nie widzialem tak dobrego filmu.', 19),
+    ('Justyna', 'Rutkowski', '2024-02-09', 'Rezyseria na wysokim poziomie, swietnie nakrecone sceny.', 20),
+    ('Robert', 'Sadowski', '2020-07-25', 'Nie rozumiem zachwytu, film byl dla mnie przecietny.', 21),
+    ('Emil', 'Sienkiewicz', '2024-09-10', 'Rewelacyjna gra aktorska i dobrze napisane dialogi.', 22),
+    ('Jakub', 'Cieslak', '2021-02-18', 'Film byl niesamowity! Swietna gra aktorska i rewelacyjna fabula.', 23),
+    ('Radoslaw', 'Baranski', '2023-08-05', 'Film byl poprawny, ale nie wyroznial sie niczym szczegolnym.', 24),
+    ('Gerard', 'Michalski', '2020-10-11', 'Nieco zbyt dlugi, ale historia byla angazujaca.', 25),
+    ('Stanislaw', 'Lewandowski', '2022-07-16', 'Film byl poprawny, ale nie wyroznial sie niczym szczegolnym.', 26),
+    ('Natalia', 'Sokolowski', '2024-08-18', 'Nie rozumiem zachwytu, film byl dla mnie przecietny.', 27),
+    ('Daria', 'Orlowski', '2021-07-10', 'Przyjemne widowisko, ale nie zachwycilo mnie na tyle, by obejrzec ponownie.', 28),
+    ('Miroslaw', 'Sobczak', '2024-06-14', 'Rezyseria na wysokim poziomie, swietnie nakrecone sceny.', 29),
+    ('Waldemar', 'Wisniewski', '2020-10-03', 'Nieco zbyt dlugi, ale historia byla angazujaca.', 30),
+    ('Joanna', 'Urban', '2024-12-10', 'Przyjemne widowisko, ale nie zachwycilo mnie na tyle, by obejrzec ponownie.', 31),
+    ('Romuald', 'Piekarski', '2022-07-25', 'Nie bylo rewelacji, ale nie byl tez bardzo slaby.', 32),
+    ('Kornelia', 'Cybulski', '2023-04-14', 'Film byl niesamowity! Swietna gra aktorska i rewelacyjna fabula.', 33),
+    ('Ilona', 'Kolodziej', '2024-09-02', 'Nie rozumiem tego hype’u, film byl mocno sredni.', 34),
+    ('Otylia', 'Mazur', '2021-05-11', 'Film byl niesamowity! Swietna gra aktorska i rewelacyjna fabula.', 35),
+    ('Maria', 'Piotrowski', '2023-12-26', 'Nie bylo rewelacji, ale nie byl tez bardzo slaby.', 36),
+    ('Tadeusz', 'Lis', '2024-07-18', 'Film zaskoczyl mnie pozytywnie, zdecydowanie warto zobaczyc.', 37),
+    ('Szymon', 'Urbanski', '2022-08-06', 'Rezyseria na wysokim poziomie, swietnie nakrecone sceny.', 38),
+    ('Elzbieta', 'Nowakowski', '2022-06-09', 'Nie bylo rewelacji, ale nie byl tez bardzo slaby.', 39),
+    ('Leszek', 'Krawczyk', '2023-04-18', 'Nie moj styl kina, ale doceniam wykonanie.', 40),
+    ('Borys', 'Czerwinski', '2022-02-11', 'Doskonała rezyseria i wciagajaca historia, polecam kazdemu.', 41),
+    ('Olga', 'Dudzik', '2022-12-04', 'Zdecydowanie jeden z najlepszych filmow ostatnich lat.', 42),
+    ('Rafal', 'Bednarek', '2021-07-13', 'Klimatyczne, ciekawe ujecia, ale historia dosc przewidywalna.', 43),
+    ('Hubert', 'Janik', '2022-05-17', 'Nie podobalo mi sie, nudna akcja i przewidywalne zakonczenie.', 44),
+    ('Damian', 'Swiderski', '2021-05-03', 'Efekty specjalne byly niesamowite, ale fabula byla dosc slaba.', 45),
+    ('Cecylia', 'Trzeciak', '2024-09-23', 'Sztuczne dialogi i slaba gra aktorska, nie polecam.', 46),
+    ('Henryk', 'Wilk', '2021-03-08', 'Doskonałe zdjecia i rezyseria, ale fabula nie przekonala mnie.', 47),
+	('Patrycja', 'Gorski', '2020-10-05', 'Nie bylo zle, ale moglo byc lepiej. Tylko na jedno obejrzenie.', 48),
+    ('Blazej', 'Rogalski', '2022-12-29', 'Najlepszy film w tym roku! Wszystko dopracowane do perfekcji.', 49),
+    ('Daniel', 'Mucha', '2024-03-15', 'Swietne efekty wizualne, ale fabula mogla byc lepsza.', 50),
+    ('Sylwia', 'Tomaszewski', '2022-08-21', 'Film byl poprawny, ale nie wyroznial sie niczym szczegolnym.', 51),
+    ('Ewa', 'Filipowicz', '2020-07-30', 'Nie byl to najlepszy film w tym gatunku, ale mial dobre momenty.', 52),
+    ('Pawel', 'Dudek', '2021-11-04', 'Bardzo klimatyczny film, trzymal w napieciu do samego konca.', 53),
+    ('Alicja', 'Jankowski', '2023-06-26', 'Film mial potencjal, ale zostal niewykorzystany.', 54),
+    ('Maciej', 'Zarzycki', '2024-05-18', 'Nie moj styl kina, ale doceniam wykonanie.', 55),
+    ('Wojciech', 'Borkowski', '2022-04-22', 'Dobrze sie bawilem, ale drugi raz bym nie obejrzal.', 56),
+    ('Aleksander', 'Sobolewski', '2024-01-09', 'Rewelacyjna historia, mialem ciarki w kilku momentach!', 57),
+    ('Marcin', 'Kubicki', '2023-07-14', 'Film byl niesamowity! Swietna gra aktorska i rewelacyjna fabula.', 58),
+    ('Aneta', 'Juliusz', '2024-10-08', 'Film, ktory kazdy powinien zobaczyc, rewelacyjne wykonanie!', 59),
+    ('Tomasz', 'Horodniczy', '2020-11-28', 'Zbyt przewidywalny, ale mimo wszystko dobrze sie ogladalo.', 60),
+    ('Karolina', 'Mikolajczyk', '2021-09-17', 'Nie rozumiem tego hype’u, film byl mocno sredni.', 61),
+    ('Sebastian', 'Skrzypczak', '2024-04-11', 'Doskonała rezyseria i wciagajaca historia, polecam kazdemu.', 62),
+    ('Gabriela', 'Pawlak', '2023-03-04', 'Film byl poprawny, ale nie wyroznial sie niczym szczegolnym.', 63),
+    ('Stanislaw', 'Kasprzak', '2021-06-20', 'Nie bylo zle, ale moglo byc lepiej. Tylko na jedno obejrzenie.', 64),
+    ('Kamil', 'Wasilewski', '2020-05-14', 'Swietny film, trzymal w napieciu do samego konca.', 65),
+    ('Dominika', 'Andrzejewski', '2023-10-30', 'Przyjemne widowisko, ale nie zachwycilo mnie na tyle, by obejrzec ponownie.', 66),
+    ('Jan', 'Gajewski', '2024-07-05', 'Nieco za dlugi, ale ogolnie dobrze sie ogladalo.', 67),
+    ('Zofia', 'Mazurek', '2022-01-27', 'Film byl poprawny, ale nie wyroznial sie niczym szczegolnym.', 68),
+    ('Norbert', 'Bielecki', '2024-06-09', 'Doskonałe zdjecia i rezyseria, ale fabula nie przekonala mnie.', 69),
+    ('Rafal', 'Biernacki', '2023-08-01', 'Swietne efekty wizualne, ale fabula mogla byc lepsza.', 70),
+    ('Juliusz', 'Kowalczyk', '2020-09-02', 'Film byl niesamowity! Swietna gra aktorska i rewelacyjna fabula.', 71),
+    ('Oskar', 'Pietrzak', '2021-12-19', 'Nie rozumiem zachwytu nad tym filmem, dla mnie byl przecietny.', 72),
+    ('Leon', 'Tymoteusz', '2022-02-08', 'Rewelacyjna historia, mialem ciarki w kilku momentach!', 73),
+    ('Ewelina', 'Wilczynski', '2023-05-23', 'Film byl niesamowity! Swietna gra aktorska i rewelacyjna fabula.', 74),
+    ('Blazej', 'Gorska', '2024-11-15', 'Film z ogromnym potencjalem, ale troche zawiodlem sie na zakonczeniu.', 75),
+    ('Agnieszka', 'Krajewski', '2022-06-10', 'Dobrze sie bawilem, ale drugi raz bym nie obejrzal.', 76),
+    ('Tymoteusz', 'Wilk', '2024-02-27', 'Nie bylo rewelacji, ale nie byl tez bardzo slaby.', 77),
+    ('Joanna', 'Biernacki', '2023-04-13', 'Klimatyczne, ciekawe ujecia, ale historia dosc przewidywalna.', 78),
+    ('Grzegorz', 'Horodniczy', '2021-10-29', 'Swietna fabula, dawno nie widzialem tak dobrego filmu.', 79),
+    ('Feliks', 'Dabrowski', '2022-03-31', 'Najlepszy film w tym roku! Wszystko dopracowane do perfekcji.', 80),
+    ('Lukasz', 'Janik', '2023-01-22', 'Nie bylo zle, ale moglo byc lepiej. Tylko na jedno obejrzenie.', 81),
+    ('Otylia', 'Brzozowski', '2021-07-17', 'Film byl niesamowity! Swietna gra aktorska i rewelacyjna fabula.', 82),
+    ('Franciszek', 'Romanowski', '2024-08-28', 'Nie byl to najlepszy film w tym gatunku, ale mial dobre momenty.', 83),
+    ('Aleksandra', 'Czarnecki', '2022-09-12', 'Film byl poprawny, ale nie wyroznial sie niczym szczegolnym.', 84),
+    ('Dawid', 'Leszczynski', '2020-06-06', 'Nie rozumiem zachwytu nad tym filmem, dla mnie byl przecietny.', 85),
+    ('Mateusz', 'Zarzycki', '2024-03-14', 'Rewelacyjna historia, mialem ciarki w kilku momentach!', 86),
+    ('Barbara', 'Wlodarczyk', '2023-02-25', 'Film byl poprawny, ale nie wyroznial sie niczym szczegolnym.', 87),
+    ('Krzysztof', 'Sobolewski', '2021-11-20', 'Film byl niesamowity! Swietna gra aktorska i rewelacyjna fabula.', 88),
+    ('Witold', 'Kubicki', '2024-05-17', 'Film z ogromnym potencjalem, ale troche zawiodlem sie na zakonczeniu.', 89),
+    ('Zdzislaw', 'Pawlak', '2023-09-27', 'Dobrze sie bawilem, ale drugi raz bym nie obejrzal.', 90),
+    ('Leszek', 'Podgorski', '2021-12-30', 'Nie bylo rewelacji, ale nie byl tez bardzo slaby.', 91),
+    ('Stanislaw', 'Rutkowski', '2022-07-07', 'Swietny film, trzymal w napieciu do samego konca.', 92),
+    ('Gerard', 'Czerwinski', '2024-10-22', 'Doskonałe zdjecia i rezyseria, ale fabula nie przekonala mnie.', 93),
+    ('Maciej', 'Cieslak', '2023-06-02', 'Film byl niesamowity! Swietna gra aktorska i rewelacyjna fabula.', 94),
+    ('Natalia', 'Urban', '2020-11-26', 'Nie byl to najlepszy film w tym gatunku, ale mial dobre momenty.', 95),
+    ('Marta', 'Mazur', '2024-02-14', 'Film byl poprawny, ale nie wyroznial sie niczym szczegolnym.', 96),
+    ('Robert', 'Filipowicz', '2023-08-07', 'Nie byl to najlepszy film w tym gatunku, ale mial dobre momenty.', 97),
+    ('Patrycja', 'Borkowski', '2021-05-18', 'Nie bylo rewelacji, ale nie byl tez bardzo slaby.', 98),
+    ('Sebastian', 'Jablonski', '2022-04-15', 'Film byl niesamowity! Swietna gra aktorska i rewelacyjna fabula.', 99),
+    ('Oskar', 'Dabrowski', '2024-07-19', 'Swietny film, trzymal w napieciu do samego konca.', 100);
+
+INSERT INTO gatunki (gatunek) VALUES
+	('Akcja'),
+	('Przygodowy'),
+	('Animacja'),
+	('Biograficzny'),
+	('Komedia'),
+	('Dramat'),
+	('Fantasy'),
+    ('Sci-Fi'),
+    ('Horror'),
+    ('Thriller'),
+    ('Musical'),
+    ('Romans'),
+    ('Kryminał'),
+    ('Western'),
+    ('Historyczny');
+	
+	
+INSERT INTO aktorzy_filmy (aktor_id, film_id) VALUES
+	(6, 1),  
+	(17, 1), 
+	(8, 2),  
+	(3, 3),  
+	(4, 4),  
+	(5, 5),  
+	(8, 6),  
+	(15,6),
+	(14, 7), 
+	(10, 8), 
+	(15, 9), 
+	(27, 10), 
+	(35, 11), 
+    (20, 12), 
+    (12, 13), 
+	(18,13),
+    (13, 14), 
+    (11, 15), 
+    (10, 16), 
+    (38, 17), 
+    (21, 18), 
+    (22, 19), 
+    (24, 20), 
+    (8, 21),  
+    (29, 22), 
+	(37,22),
+    (27, 23), 
+    (21, 24), 
+    (22, 25), 
+    (28, 26), 
+    (8, 27),  
+    (3, 28), 
+    (42, 29), 
+    (10, 30), 
+    (38, 31), 
+    (10, 32), 
+	(77,32),
+    (28, 33), 
+    (32, 34), 
+    (33, 35), 
+    (31, 36), 
+    (11, 37), 
+    (38, 38),
+    (9, 39),  
+	(62,39),
+    (36, 40), 
+    (33, 41), 
+    (37, 42),
+    (30, 43), 
+    (32, 44), 
+    (10, 45), 
+    (15, 46), 
+    (28, 47),
+    (8, 48),  
+    (22, 49), 
+    (42, 50), 
+	(98,50),
+    (43, 51), 
+    (42, 52), 
+    (38, 53), 
+    (10, 54), 
+    (28, 55), 
+    (44, 56), 
+    (51, 57), 
+    (50, 58),
+    (56, 59), 
+    (57, 60), 
+    (52, 61), 
+    (53, 62), 
+    (58, 63), 
+    (59, 64), 
+    (38, 65), 
+    (9, 66),  
+	(2,66),
+    (57, 67), 
+    (53, 68), 
+    (59, 69), 
+    (42, 70), 
+    (52, 71), 
+    (55, 72), 
+    (63, 73), 
+    (66, 74), 
+    (75, 75), 
+    (76, 76), 
+    (77, 77), 
+    (78, 78), 
+    (79, 79), 
+    (63, 80), 
+    (56, 81), 
+    (66, 82), 
+    (52, 83), 
+	(77,83),
+    (42, 84), 
+    (63, 85), 
+    (66, 86), 
+    (76, 87), 
+    (78, 88), 
+    (77, 89), 
+    (79, 90), 
+    (80, 91), 
+    (81, 92), 
+	(12,92),
+    (82, 93), 
+    (83, 94), 
+    (63, 95), 
+    (66, 96), 
+    (78, 97), 
+	(38,39),
+    (79, 98), 
+    (81, 99), 
+    (75, 100); 
+
+INSERT INTO filmy_gatunki (film_id, gatunek_id) VALUES
+	(1, 4), (1, 6), (1, 15), 
+	(2, 5), (2, 6), (2, 12), 
+	(3, 4), (3, 6), 
+	(4, 6), (4, 15), 
+	(5, 6), (5, 13), (5, 10), 
+	(6, 6), (6, 15), 
+	(7, 6), (7, 7), (7, 10), 
+	(8, 6), (8, 12), 
+	(9, 6), (9, 13), 
+	(10, 6), (10, 5), (10, 13), 
+	(11, 4), (11, 6), (11, 15), 
+	(12, 6), (12, 13), (12, 10), 
+    (13, 6), (13, 3), 
+    (14, 6), (14, 4), (14, 15), 
+    (15, 6), (15, 10), 
+    (16, 6), (16, 10), 
+    (17, 6), (17, 13), 
+    (18, 6), (18, 13), 
+    (19, 6), (19, 13), 
+    (20, 6), (20, 10), 
+    (21, 2), (21, 6), (21, 7), 
+    (22, 6), (22, 5), (22, 11), 
+    (23, 6), (23, 4), (23, 15), 
+    (24, 6), (24, 2), 
+    (25, 6), (25, 5), 
+    (26, 6), (26, 5), (26, 12), 
+    (27, 6), (27, 12), (27, 15), 
+    (28, 6), (28, 12), 
+    (29, 6), (29, 15), (29, 14), 
+    (30, 6), (30, 5), 
+    (31, 6), (31, 15), 
+    (32, 6), (32, 14), 
+    (33, 6), (33, 10), 
+    (34, 6), (34, 14), 
+    (35, 6), (35, 5), 
+    (36, 6), 
+    (37, 6), (37, 15), 
+    (38, 6), (38, 15), 
+    (39, 6), (39, 15), 
+    (40, 6), (40, 15), 
+    (41, 6), (41, 5), 
+    (42, 6), (42, 15), 
+    (43, 6), (43, 15), 
+    (44, 6), 
+    (45, 6), 
+    (46, 6), (46, 15), 
+    (47, 6), (47, 5), 
+    (48, 6), (48, 2), 
+    (49, 6), 
+    (50, 6), (50, 13), 
+    (51, 6), (51, 13), 
+    (52, 6), (52, 13), 
+    (53, 6), (53, 13), 
+    (54, 6), (54, 15), 
+    (55, 6), (55, 15), 
+    (56, 6), (56, 5), 
+    (57, 6), (57, 13), 
+    (58, 6), (58, 15), 
+    (59, 6), (59, 11), 
+    (60, 6), (60, 11), 
+    (61, 6), (61, 5), 
+    (62, 6), (62, 15), 
+    (63, 6), (63, 11), 
+    (64, 6), (64, 5), 
+    (65, 6), (65, 2), 
+    (66, 6), (66, 5), 
+    (67, 6), (67, 15), 
+    (68, 2), (68, 6), 
+    (69, 6), (69, 5), 
+    (70, 6), (70, 13), 
+    (71, 6), (71, 15), 
+    (72, 6), (72, 2), (72, 11), 
+    (73, 6), (73, 11), 
+    (74, 6), (74, 13), 
+    (75, 6), (75, 14), 
+    (76, 6), (76, 13), 
+    (77, 6), (77, 15), 
+    (78, 6), (78, 10), 
+    (79, 6), (79, 5), 
+    (80, 6), (80, 13), 
+    (81, 6), (81, 5), 
+    (82, 6), (82, 15), 
+    (83, 6), (83, 13), 
+    (84, 6), (84, 15), (84, 12), 
+    (85, 6), (85, 5), 
+    (86, 6), (86, 15), 
+    (87, 6), (87, 15), 
+    (88, 6), (88, 2), (88, 13), 
+    (89, 6), (89, 5), (89, 12), 
+    (90, 6), (90, 15), 
+    (91, 6), (91, 13), 
+    (92, 6), (92, 2), (92, 14), 
+    (93, 6), (93, 15), 
+    (94, 6), (94, 11), 
+    (95, 2), (95, 6), 
+    (96, 6), (96, 12), 
+    (97, 6), (97, 13), 
+    (98, 6), (98, 5), 
+    (99, 6), (99, 2), 
+    (100, 6), (100, 5);
+	
+ -- widok pozwalajacy zobaczyc jak wiele razy aktor gra w filmach z listy. Na dole komenda pokazujaca wyniki + sortowanie (bo w widoku nie moge sortowac po liczbie filmow)
+CREATE VIEW aktorzy_wielu_filmow AS
+SELECT 
+	a.aktor_id,
+	a.imie,
+	a.nazwisko,
+COUNT(af.film_id) AS liczba_filmow
+FROM aktorzy a
+JOIN aktorzy_filmy af ON a.aktor_id = af.aktor_id
+GROUP BY a.aktor_id, a.imie, a.nazwisko
+
+SELECT * FROM aktorzy_wielu_filmow
+ORDER BY liczba_filmow DESC;
+
+-- komenda, pozwalajaca zobaczyc ilosc recenzji dla kazdego recenzenta. Recenzenci sa unikalni wiec kazdy ma po 1. 
+SELECT 
+	r.imie,
+	r.nazwisko,
+COUNT(r.recenzja_id) AS liczba_recenzji
+FROM recenzje r
+GROUP BY r.imie, r.nazwisko
+ORDER BY liczba_recenzji DESC;
+
+-- wynik tego zapytania jest podobny jak tego powyzej, ale dolaczam do siebie filmy i recenzje przez co mozemy zobaczyc ilosc (recenzja_id) dla danego filmd_id
+SELECT 
+    f.film_id, 
+    f.tytul, 
+COUNT(r.recenzja_id) AS liczba_recenzji
+FROM filmy f
+LEFT JOIN recenzje r ON f.film_id = r.film_id
+GROUP BY f.film_id, f.tytul
+ORDER BY liczba_recenzji ASC;
+
+-- tutaj praktycznie ten sam pomysl, tylko pokazuje jaki aktor gral w ilu filmach. Wynik bardzo podobny wczesniejszego zapytania ze zwyklym joinem, ale tam byl inner join i 55 wynikow a tutaj mamy 100 wynikow bo mamy tez aktorow bez zadnej roli w jakimkolwiek filmie.
+SELECT 
+    a.aktor_id, 
+    a.imie, 
+    a.nazwisko, 
+COUNT(af.film_id) AS liczba_filmow
+FROM aktorzy a
+LEFT JOIN aktorzy_filmy af ON a.aktor_id = af.aktor_id
+GROUP BY a.aktor_id, a.imie, a.nazwisko
+ORDER BY liczba_filmow DESC;
+
+-- okazalo sie, ze ktos pomylil wartosci dla dwoch aktorow. Sean Penn jednak byl nominowany 6 nie 5 razy do oskara, zas Will Smith jednak urodzil sie wtedy, co Kevin Spacey. 
+-- ponizsza klauzula pozwoli nam naprawic niesforny blad i updatowac wczesniej wspomniane wartosci, na te poprawne juz wpisane. 
+MERGE INTO aktorzy AS target 
+USING (VALUES 
+    (15, 'Sean', 'Penn', '1960-08-17', 6),  
+    (2, 'Will', 'Smith', '1959-07-26', 3)   
+) AS source (aktor_id, imie, nazwisko, data_urodzenia, nominacje_do_oscarow)
+ON target.aktor_id = source.aktor_id
+WHEN MATCHED THEN 
+    UPDATE SET 
+        target.nominacje_do_oscarow = source.nominacje_do_oscarow,
+        target.data_urodzenia = source.data_urodzenia;
+
+	
+-- ku zaskoczeniu wszystkich, Pan Morgan Freeman jednak zagral w filmie Ojciec Chrzestny 2. Nalezy to zmienic w naszej tabeli. 
+	MERGE INTO aktorzy_filmy AS target
+USING (VALUES 
+    (87, 50)     
+) AS source (aktor_id, film_id)
+ON target.aktor_id = source.aktor_id AND target.film_id = source.film_id
+WHEN NOT MATCHED THEN
+    INSERT (aktor_id, film_id)
+    VALUES (source.aktor_id, source.film_id);
+	
+-- tutaj dodaje zasade, ktora uniemozliwia wprowadzenie bledu w postaci dodania aktora, ktory ma mniej niz 1 nominacji do oskarow. Tylko tacy nas interesuja.
+ALTER TABLE aktorzy 
+ADD CONSTRAINT nominacje CHECK (nominacje_do_oscarow > 0);
+
+-- definiujemy zasade unikalnosci gatunkow 
+ALTER TABLE gatunki 
+ADD CONSTRAINT unikalny_gatunek UNIQUE (gatunek);
+
+-- zamykamy mozliwosc dodania aktora z nullem na imieniu lub nazwisku do bazy.
+ALTER TABLE aktorzy 
+ALTER COLUMN imie VARCHAR(100) NOT NULL;
+ALTER TABLE aktorzy 
+ALTER COLUMN nazwisko VARCHAR(100) NOT NULL;
+
+-- tabela z filmami opiera sie o te juz wydane, wiec definiujemy brak mozliwosci wpisania daty z przyszlosci wzgledem obecnej. 
+-- Oczywiscie, filmy maja daty wydania przed swoim realnym wydaniem ale tutaj nie dajemy takiej mozliwosci bo to filmy oskarowe, czyli musialy zostac wydane.
+ALTER TABLE filmy 
+ADD CONSTRAINT film_przyszlosci CHECK (data_wydania <= GETDATE());
+
+-- tutaj robie tabele pivot, zmieniajac film_id na kolumny a date wydania na wiersze. 
+-- ta tabela pokazuje, czy w jakis dzien bylo wiecej niz 1 recenzji roznych filmow w postaci tabeli.
+SELECT * 
+FROM 
+(
+	SELECT 
+	film_id, 
+	data_wydania, 
+	COUNT(*) AS liczba_recenzji
+	FROM recenzje
+	GROUP BY film_id, data_wydania
+) AS Zrodlo 
+PIVOT
+(
+	MAX(liczba_recenzji) -- niestety, w zaden dzien nie bylo więcej niż 1 recenzji, wiec mozna by uzyc rownieź max,min lub avg ale gdyby bylo wiecej to musi byc max.
+	FOR film_id IN (
+	[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], 
+	[11], [12], [13], [14], [15], [16], [17], [18], [19], [20],
+	[21], [22], [23], [24], [25], [26], [27], [28], [29], [30],
+	[31], [32], [33], [34], [35], [36], [37], [38], [39], [40],
+	[41], [42], [43], [44], [45], [46], [47], [48], [49], [50],
+	[51], [52], [53], [54], [55], [56], [57], [58], [59], [60],
+	[61], [62], [63], [64], [65], [66], [67], [68], [69], [70],
+	[71], [72], [73], [74], [75], [76], [77], [78], [79], [80],
+	[81], [82], [83], [84], [85], [86], [87], [88], [89], [90],
+	[91], [92], [93], [94], [95], [96], [97], [98], [99], [100])
+) PVT
+
+
+-- to chyba cos co najbardziej mi wyszlo czyli analiza sentymentu w oparciu o ocene filmu
+-- generalnie, jest to taki prosty slownik pozwalajacy na klasfyikacje filmu do kategori
+-- niestety, do oceny filmu nie uzylem skali liczbowej czego zaluje, bo moglbym uzyc funkcji do pokazania srednich ocenen
+-- pod tabela zamieszczam zrodla, ktore wykorzystalem do takiej analizy, jednak wiekszosc robi to z pomoca pythona i na wartosciach liczbowych.
+
+SELECT * 
+FROM (
+SELECT 
+film_id,
+CASE 
+	WHEN tresc LIKE '%swietny%' OR tresc LIKE '%polecam%' OR tresc LIKE '%arcydzielo%'  OR tresc LIKE '%rewelacyjny%' OR tresc LIKE '%doskonaly%' THEN 'Pozytywna'
+	WHEN tresc LIKE '%przecietny%' OR tresc LIKE '%moglo byc lepiej%' OR tresc LIKE '%sredni%' OR tresc LIKE '%poprawny%' OR tresc LIKE '%nie wyroznial sie%' THEN 'Neutralna'
+	WHEN tresc LIKE '%slaby%' OR tresc LIKE '%rozczarowanie%' OR tresc LIKE '%nie polecam%' OR tresc LIKE '%nudny%' OR tresc LIKE '%przewidywalny%' THEN 'Negatywna'
+ELSE 'Nieokreslona'
+END AS sentyment
+FROM recenzje
+)AS Zrodlo1
+PIVOT (
+COUNT(sentyment) 
+FOR sentyment IN (
+[Pozytywna], [Neutralna], [Negatywna], [Nieokreslona]
+)
+) AS PVT
