@@ -23,7 +23,7 @@ You can also connect with me on [LinkedIn](https://www.linkedin.com/in/piotr-dą
 
 ## Professional Experience
 
-- 📊 **People Analytics Intern** – *Philip Morris International* (2024 – present)  
+- 📊 **People Analytics Intern** – *Philip Morris International* (2024 – 2025)  
   Supporting HR data analysis, reporting, automation, and trend identification using tools like **Qualtrics**, **Power BI**, and **Excel**.
 
 - 🚚 **International Logistics Intern** – *ABB* (2023)  
