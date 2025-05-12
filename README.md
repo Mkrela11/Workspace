@@ -57,6 +57,17 @@ A comprehensive SQL database project built entirely from scratch, focusing on:
 
 This project demonstrates both technical SQL skills and a thoughtful approach to relational database design and storytelling through data.
 
+### 💼 [Job Listing Dashboard – Power BI Application Portal (Simulation)](https://github.com/Mkrela11/Workspace/blob/main/Job%20Application%20Dashboard.pbix)
+
+An interactive Power BI dashboard simulating a **job application portal**, built to showcase user experience design and analytical capabilities. The dashboard allows users to:
+
+- 🔍 Browse job offers filtered by **location**, **department**, and **work model** (remote / hybrid / on-site)  
+- 📊 Explore visual summaries of job openings across Europe via **map and bar charts**  
+- 📄 Navigate to detailed job listings including **title**, **requirements**, **benefits**, and **descriptions**  
+- 📝 Use a fully simulated **application form** with fields for personal data and position selection  
+- ✅ Submit an application and receive visual confirmation in an intuitive UX flow
+
+This project demonstrates practical skills in **Power BI interface design**, **data modeling**, and **user journey planning** in a business-like recruitment scenario.
 
 
 
