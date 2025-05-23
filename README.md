@@ -69,6 +69,20 @@ An interactive Power BI dashboard simulating a **job application portal**, built
 
 This project demonstrates practical skills in **Power BI interface design**, **data modeling**, and **user journey planning** in a business-like recruitment scenario.
 
+### 📦 [Olist E-Commerce SQL Analysis](https://github.com/Mkrela11/Workspace/blob/main/Olist%20SQL%20Analsyis.sql)
+
+An in-depth SQL analytics project based on the real-world **Brazilian e-commerce Olist dataset**, designed to showcase relational reasoning, data segmentation, and business insights extraction.
+
+The project is structured into five thematic analytical segments:
+
+- **Segment 1: Core KPIs** – summary statistics on customers, sellers, orders, products, and reviews  
+- **Segment 2: Orders & Payments** – revenue calculations, shipping costs, and payment methods including installments  
+- **Segment 3: Customer Segmentation** – classification into VIP / Medium / Low spenders, with regional behavior insights  
+- **Segment 4: Top Sellers & Products** – most valuable products and sellers ranked by revenue, reach, and customer base  
+- **Segment 5: Delivery Problems** – late deliveries, average delays, and their correlation with customer review scores
+
+This project demonstrates advanced SQL querying, use of window functions, temporary tables, segmentation logic, and preparation of outputs for BI tools such as Power BI or Tableau.
+
 
 
 
