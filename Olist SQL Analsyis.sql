@@ -1,4 +1,4 @@
--- SEGMENT 1: Basic Statistics
+--- SEGMENT 1: Basic Statistics
 -- Overview of key entities in the database.
 
 SELECT
