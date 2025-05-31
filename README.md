@@ -83,6 +83,19 @@ The project is structured into five thematic analytical segments:
 
 This project demonstrates advanced SQL querying, use of window functions, temporary tables, segmentation logic, and preparation of outputs for BI tools such as Power BI or Tableau.
 
+### 📊 [Olist Power BI Dashboard](https://github.com/Mkrela11/Workspace/blob/main/Olist%20Dashboard.pdf)
+
+A comprehensive **Power BI report** built on top of the Olist Brazilian e-commerce dataset, designed to visually present business performance, customer behavior, and sales operations.
+
+Due to the DB size it's only PDF. If you would like to view an PBIX - contact me. 
+
+This dashboard was structured across multiple views and includes:
+
+- 💡 **Executive Overview** – key KPIs like total revenue, delayed orders, and average order value  
+- 📦 **Product & Seller Insights** – revenue by category, top-performing sellers, and product distributions  
+- 💳 **Payment Breakdown** – an
+
+
 
 
 
