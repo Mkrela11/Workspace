@@ -113,7 +113,28 @@ The dashboard provides:
 
 This project demonstrates practical skills in **Power BI layout**, **color coordination**, **interactive filtering**, and **data-driven HR reporting** in a corporate context.
 
+## 🛠️ Skills 
 
+**IBM SPSS**  
+Organizing data, analyzing variables, creating frequency tables, and generating descriptive statistics for social science applications.
 
+**MS Office**  
+Proficient in Microsoft Excel, Word, and PowerPoint, with experience in both data processing and presentation formatting.
+
+**Power BI**  
+Experience in data visualization, importing, merging, cleaning, and transforming datasets. Skilled in modeling and publishing reports using the Power BI desktop application.
+
+**MAXQDA**  
+Competent in qualitative data analysis: variable coding, generating code maps, and using the platform for social research.
+
+**SQL**  
+Fundamental knowledge of SQL for data filtering, sorting, summarizing, and dataset manipulation. Able to create and edit queries for business use cases.
+
+**English**  
+Fluent in English. Experience working in English-only teams and with international clients.
+
+## 📄 Resume  
+
+### 📄 My CV (https://github.com/Mkrela11/Workspace/blob/main/Piotr_Dabrowski.pdf)
 
 
