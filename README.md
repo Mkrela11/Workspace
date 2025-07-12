@@ -39,7 +39,6 @@ You can also connect with me on [LinkedIn](https://www.linkedin.com/in/piotr-dą
 - 📁 Projects  
 - 🛠️ Skills  
 - 📄 Resume  
-- 📬 Contact
 
 - ---
 
