@@ -91,9 +91,28 @@ Due to the DB size it's only PDF. If you would like to view an PBIX - contact me
 
 This dashboard was structured across multiple views and includes:
 
-- 💡 **Executive Overview** – key KPIs like total revenue, delayed orders, and average order value  
-- 📦 **Product & Seller Insights** – revenue by category, top-performing sellers, and product distributions  
-- 💳 **Payment Breakdown** – an
+- 💡 **Executive Overview** – a clean one-page layout showcasing KPIs like revenue, delayed orders, average order value, and item count  
+- 📦 **Product & Seller Insights** – top categories and sellers by value, along with detailed sales breakdowns  
+- 💳 **Payment Breakdown** – income grouped by payment types with proportions and volumes  
+- 🧑‍🤝‍🧑 **Customer Segmentation** – revenue band classification based on purchase value and grouped order volume  
+
+This project demonstrates advanced **Power BI interface design**, **data modeling**, **DAX usage**, and **data storytelling** using real-world e-commerce data.
+
+### 👥 [HR Analytics Dashboard – IBM Employees](https://github.com/Mkrela11/Workspace/blob/main/Hr_IBM.pbix)
+
+This project was designed to explore HR metrics related to employee demographics, departmental breakdown, and education, supporting workforce planning and strategic HR insights.
+
+Database used for the project is here: https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset?resource=download
+
+The dashboard provides:
+
+- 🧠 **Educational Analysis** – visualizations of employee education levels and fields of study  
+- 🏢 **Department Breakdown** – headcount distribution across business units (e.g., R&D, Sales, HR)  
+- 🧍‍♂️🧍‍♀️ **Demographic KPIs** – average employee age and gender split  
+- 🏠 **Distance to Work Insights** – pie chart displaying commuting distance categories  
+- 📊 **HR Table View** – structured tabular breakdown of employees by department
+
+This project demonstrates practical skills in **Power BI layout**, **color coordination**, **interactive filtering**, and **data-driven HR reporting** in a corporate context.
 
 
 
