@@ -113,6 +113,23 @@ The dashboard provides:
 
 This project demonstrates practical skills in **Power BI layout**, **color coordination**, **interactive filtering**, and **data-driven HR reporting** in a corporate context.
 
+### [HR IBM Data Analsyis in R](https://github.com/Mkrela11/Workspace/blob/main/Hr_IBM_R)
+
+It's a follow up to the projected mentioned above.
+
+Here I have focused more on variables messured within interval scales. I've used libraries like RandomForest, psych, pheatmap, factoextra, dplyr, ggplot2 and tidyr. 
+Main idea behind this code was to take a deeper look into HR Data and analyze trends, outliers and use statistical methods to analyze results.
+
+Code Provides:
+
+- **Attrition Modeling (Random Forest)** – prediction of employee churn based on variables like overtime, job satisfaction, or years at company  
+- **Principal Component Analysis** – dimensionality reduction and rotation (Varimax), capturing 75% of variance in 4 PCs  
+- **Clustering** – segmentation of employees into distinct behavioral profiles, visualized with cluster plots  
+- **Job Satisfaction Regression** – ordinal regression assessing influence of distance, overtime, and promotion history on satisfaction  
+- **Income Outlier Detection** – IQR-based detection of salary anomalies with boxplots, focus on top 5% earners  
+- **Role Profiling for High Earners** – breakdown of top-paid employees by department, job role, and attrition rate
+
+
 ## 🛠️ Skills 
 
 **IBM SPSS**  
