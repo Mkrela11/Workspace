@@ -1,0 +1,235 @@
+employees <- read.csv("WA_Fn-UseC_-HR-Employee-Attrition.csv", header = TRUE, sep = ";")
+
+## Correlations on Job Satisfaction 
+
+cor(employees$JobSatisfaction, employees$MonthlyIncome)
+cor(employees$JobSatisfaction, employees$TotalWorkingYears)
+cor(employees$JobSatisfaction, employees$YearsAtCompany)
+cor(employees$JobSatisfaction, employees$YearsSinceLastPromotion)
+
+## Logistic Regression on Attrition and What Could Cause it.
+
+model_logit <- glm((Attrition == "Yes") ~ Age + BusinessTravel + JobSatisfaction + OverTime + YearsAtCompany, data = employees, family = binomial)
+summary(model_logit)
+
+## Employees frequently travelling, Working Overtime and with low Job satisfaction are more likely to leave the company.
+
+## Proceed further with the model and trying Forest on the model.
+
+library(randomForest)
+employees$AttritionNum <- ifelse(employees$Attrition == "Yes", 1, 0)
+employees$AttritionFact <- factor(employees$AttritionNum, levels = c(0, 1), labels = c("No", "Yes"))
+
+set.seed(123)
+train_idx <- sample(seq_len(nrow(employees)), size = 0.7 * nrow(employees))
+train <- employees[train_idx, ]
+test  <- employees[-train_idx, ]
+
+Forest_Model <- randomForest(
+AttritionFact ~ Age + BusinessTravel + JobSatisfaction + OverTime + YearsAtCompany,
+data       = train,
+ntree      = 1470,
+mtry       = 2,
+importance = TRUE
+)
+
+print(Forest_Model)
+varImpPlot(Forest_Model)
+
+## Results are heavily unbalanced due to size of bigger group. I am tuning the model with manual balance by valuating more class less employees.
+
+Forest_Mode_Class <- randomForest(
+AttritionFact ~ Age + BusinessTravel + JobSatisfaction + OverTime + YearsAtCompany,
+data       = train,
+ntree      = 1470,
+mtry       = 2,
+importance = TRUE,
+classwt    = c(No = 1, Yes = 5)
+)
+
+print(Forest_Mode_Class)
+varImpPlot(Forest_Mode_Class)
+
+## Class error has been decreased and it's now 0.17 in the first, bigger group and 0.51 in the second group.
+
+## PCA Analysis on variables how employee see and rate employer as well as data related to personal journey with company.
+
+values_pca <- c("EnvironmentSatisfaction",
+"JobSatisfaction",
+"PerformanceRating",
+"WorkLifeBalance",
+"TotalWorkingYears",
+"YearsAtCompany",
+"YearsInCurrentRole",
+"YearsWithCurrManager")
+
+model_pca <- employees[ , values_pca]
+standarized_pca <- scale(model_pca)
+
+pca <- prcomp(standarized_pca, 
+center = FALSE,    
+scale. = FALSE)    
+
+summary(pca)
+summary(pca$rotation)
+
+pca$rotation
+
+library(psych)
+varimax(pca$rotation[, 1:4])
+
+## Until this point we can see PCA results after rotation.
+## I decide to keep 4 Principal components as they together include 75% of Variance in model.
+
+install.packages("pheatmap")      
+library(pheatmap)
+
+loadings4 <- varimax(pca$rotation[, 1:4])
+
+loadings_matrix <- as.matrix(loadings4$loadings)
+
+pheatmap(loadings_matrix,
+cluster_rows = FALSE,
+cluster_cols = FALSE,
+display_numbers = TRUE,
+fontsize_number = 10,
+main = "Rotated PCA Heatmap")
+
+## Here I've decided to present a Heatmap after the Varimax Rotation
+## Although model is not ideal, we can see difference between each component.
+
+PC_Value <- as.data.frame(pca$x[, 1:4])
+colnames(PC_Value) <- paste0("PC", 1:4)
+
+frame_with_age <- cbind(
+Age = employees$Age,
+PC_Value
+)
+
+Frame_scaled <- scale(frame_with_age)
+
+install.packages("factoextra")
+library(factoextra)
+
+fviz_nbclust(Frame_scaled, kmeans, method = "silhouette") 
+
+set.seed(123)
+k_means_values <- kmeans(Frame_scaled, centers = 3, nstart  = 25)
+
+employees$cluster <- factor(k_means_values$cluster)
+
+## I've took 4 Principal components and joined age to do k means cluster analysis.
+## Doing so could let us see if there are major differences between groups.
+## Silhouette method suggest to proceed with 3 cluster centers.
+
+
+fviz_cluster(k_means_values,
+data         = Frame_scaled,
+geom         = "point",
+ellipse.type = "convex",
+repel        = TRUE) +
+labs(title = "K-means on PC1–PC4 + Age")
+
+aggregate(
+frame_with_age,
+by   = list(cluster = k_means_values$cluster),
+FUN  = mean
+)
+
+## Those results and visualization proves us, that indeed we can divide employees into three different clusters.
+## Difference is mainly based on age, performance and job satisfaction.
+
+library(MASS)
+
+employees$JobSatFact <- ordered(employees$JobSatisfaction)
+
+jobsat_regkat <- polr(JobSatFact ~ OverTime + DistanceFromHome +YearsWithCurrManager + PercentSalaryHike,
+data = employees, Hess = TRUE)
+
+summary(jobsat_regkat)
+
+## This was an attempt to do categorical regression on Job Satisfaction. 
+## I've used MASS library to calculate what's the difference between each level of Job Satisfaction. 
+## However, all selected variables in the model are not significant.
+
+
+outliers <- function(x) {
+out <- quantile(x, probs = c(0.25, 0.75))
+iqr <- diff(out)
+lower <- out[1] - 1.5 * iqr
+upper <- out[2] + 1.5 * iqr
+x < lower | x > upper
+}
+
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+money_values <- c("HourlyRate", "DailyRate", "MonthlyRate", "MonthlyIncome", "PercentSalaryHike")
+
+
+employees_outliers <- employees %>%
+mutate(across(
+all_of(money_values),
+.fns = list(out = ~ outliers(.)),
+.names = "{.col}_out"
+)) %>%
+mutate(
+AnyPayOutlier = rowSums(select(., ends_with("_out"))) > 0
+)
+
+outliers_all <- filter(employees_outliers, AnyPayOutlier)
+
+out_pivot <- outliers_all %>%
+select(EmployeeNumber, all_of(money_values)) %>%
+pivot_longer(all_of(money_values), names_to = "Variable", values_to = "Value")
+
+
+ggplot(out_pivot, aes(x = Variable, y = Value)) +
+geom_boxplot(outlier.colour = "red", outlier.shape = 16) +
+coord_flip() +
+theme_minimal(base_size = 14) +
+labs(
+title = "Outliers in variables realted to income",
+x = NULL,
+y = "Values"
+)
+
+## Here I've worked on close look on Outliers related to income variables.
+## Considering results I want to take a look at values from Monhtly Rate.
+
+library(ggplot2)
+
+p95 <- quantile(employees$MonthlyRate, 0.95, na.rm = TRUE)
+top5 <- employees %>% filter(MonthlyRate > p95)
+
+ggplot(employees, aes("", MonthlyRate)) +
+geom_boxplot(outlier.shape = NA) +
+geom_jitter(width = 0.2, alpha = 0.3) +
+geom_point(data = top5, aes("", MonthlyRate),
+color = "red", size = 3) +
+coord_flip() +
+labs(
+title = "Entries in the top 5% in Monthly Rate",
+subtitle = paste0("Edge = ", round(p95,1),
+"; Outliers number = ", nrow(top5)),
+y = "MonthlyRate"
+) +
+theme_minimal()
+
+## Here I want to indicate what group will be studied -> those located in highest 5% in terms of Monthly Rate.
+
+
+library(dplyr)
+
+top5 <- employees %>% filter(MonthlyRate > p95)
+
+top5 %>% count(JobRole, sort = TRUE)
+
+top5 %>% count(Department, sort = TRUE)
+
+top5 %>% count(Attrition) %>% 
+mutate(pct = n / sum(n) * 100)
+
+## Here we can analyze selected employees in terms of Job Role, Department and Attrition.
+
+
