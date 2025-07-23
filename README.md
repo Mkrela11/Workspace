@@ -19,7 +19,7 @@ You can also connect with me on [LinkedIn](https://www.linkedin.com/in/piotr-dą
 - 🎓 **Master's in Data Analytics and Social Research**, Jagiellonian University, Kraków (2023 – 2025)  
 - 🎓 **Bachelor's in Sociology**, Jagiellonian University, Kraków (2020 – 2023)
 
----
+--
 
 ## Professional Experience
 
