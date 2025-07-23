@@ -129,6 +129,16 @@ Code Provides:
 - **Income Outlier Detection** – IQR-based detection of salary anomalies with boxplots, focus on top 5% earners  
 - **Role Profiling for High Earners** – breakdown of top-paid employees by department, job role, and attrition rate
 
+### [Market Mindz Dashboard](https://github.com/Mkrela11/Workspace/blob/main/Market%20Mindz%20Dashboard.pbix)
+
+Project created on a simulated database filled with customer related data.
+This project is meant to demonstrate various skills starting with data manipulation with power query to create a sub tables thru creatin nice and informative visuals and finishing the project with use of new AI widgets in PowerBI.
+
+Dashboard Provides:
+
+-- **Capaign performance page** This page include various tools to take a deep dive into buyers data. 
+-- **Buyer Composition** Here we can find an answer to questions trying to define who our buyers is and which cmpaigns were really sucessful in terms of selling certain products. 
+-- **Purchase Drivers** What motivates our buyers? Insights based on AI tools helpfull in predicting and analyzing the dataset
 
 ## 🛠️ Skills 
 
