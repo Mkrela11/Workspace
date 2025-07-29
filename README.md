@@ -136,9 +136,9 @@ This project is meant to demonstrate various skills starting with data manipulat
 
 Dashboard Provides:
 
--- **Capaign performance page** This page include various tools to take a deep dive into buyers data. 
--- **Buyer Composition** Here we can find an answer to questions trying to define who our buyers is and which cmpaigns were really sucessful in terms of selling certain products. 
--- **Purchase Drivers** What motivates our buyers? Insights based on AI tools helpfull in predicting and analyzing the dataset
+- **Capaign performance page** This page include various tools to take a deep dive into buyers data. 
+- **Buyer Composition** Here we can find an answer to questions trying to define who our buyers is and which cmpaigns were really sucessful in terms of selling certain products. 
+- **Purchase Drivers** What motivates our buyers? Insights based on AI tools helpfull in predicting and analyzing the dataset
 
 ## 🛠️ Skills 
 
