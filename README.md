@@ -140,6 +140,18 @@ Dashboard Provides:
 - **Buyer Composition** Here we can find an answer to questions trying to define who our buyers is and which cmpaigns were really sucessful in terms of selling certain products. 
 - **Purchase Drivers** What motivates our buyers? Insights based on AI tools helpfull in predicting and analyzing the dataset
 
+
+### [Coffe Company Dashboard](https://github.com/Mkrela11/Workspace/blob/main/Koffe.pbix)
+
+This is a customized dashboard created to visualize current state of sales for three different coffee shops across United States as well as forecast future sales.
+I've used a one-paged long approach to present all the visuals as well as add sea climat to the corresponding gradient connected with company colors.
+
+In the dashboard you can find:
+- **Forecasting** Based on avg. sales how different shops will perform in the future periods.
+- **Time Analysis** How time impact sales in the shop? When the most money is being made?
+- **Best selling products and categories** Classic approach to the sales related data showing all the insights important for the people in charge for future cause.
+
+
 ## 🛠️ Skills 
 
 **IBM SPSS**  
